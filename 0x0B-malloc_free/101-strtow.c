@@ -1,51 +1,86 @@
 #include "main.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 /**
- *_strlen - counts and reutns string length
- * @s: the input string
+ * wordCount - counts the number of words within a string.
+ * @str: the input string.
  *
- * Return: the length
+ * Return: the number of words.
  */
-int _strlen(char *s)
+
+int wordCount(char *str)
 {
-	int c = 0;
+	int flag = 0, wc = 0;
+	int idx;
 
-	for (c = 0; *s; c++)
-		s++;
-
-	return (c);
+	for (idx = 0; str[idx]; idx++)
+		if (str[idx] == ' ')
+			flag = 0;
+		else if (flag == 0)
+		{
+			flag = 1;
+			wc++;
+		}
+	return (wc);
 }
 
 /**
- * argstostr - concatenates all the arguments
- * @ac: # of arguments
- * @av: arguments
+ * wordLen - counts the number of letters of the word
+ * @wd: the word.
  *
- * Return: concatenated string.
+ * Return: the number of letters.
  */
-char *argstostr(int ac, char **av)
+
+int wordLen(char *wd)
 {
-	char *nstr;
-	int istr, idx, jdx, len;
+	int idx = 0;
 
-	if (!ac || !av)
+	while (*(wd + idx) && *(wd + idx) != ' ')
+		idx++;
+
+	return (idx);
+}
+
+
+/**
+ * strtow - splits a string into words
+ * @str: string of words to be split
+ *
+ * Return: double pointer to strings
+ */
+
+char **strtow(char *str)
+{
+	char **ptr;
+	int idx = 0;
+	int ldx, nw, wl, wdx;
+
+	nw = wordCount(str);
+	if (*str == '\0' || str == NULL || nw == 0)
 		return (NULL);
 
-	for (idx = 0, len = 0; idx < ac; idx++)
-		len += _strlen(av[idx]) + 1;
-
-	nstr = malloc((len + 1) * sizeof(char));
-	if (nstr == NULL)
+	ptr = malloc((nw + 1) * sizeof(char *));
+	if (ptr == NULL)
 		return (NULL);
 
-	for (istr = 0, idx = 0; idx < ac; idx++)
+	for (wdx = 0; wdx < nw; wdx++)
 	{
-		for (jdx = 0; av[idx][jdx]; jdx++, istr++)
-			nstr[istr] = av[idx][jdx];
-		nstr[istr++] = '\n';
+		while (str[idx] == ' ')
+			idx++;
+
+		wl = wordLen(str + idx);
+		ptr[wdx] = malloc((wl + 1) * sizeof(char));
+		if (ptr[wdx] == NULL)
+		{
+			while (wdx--)
+				free(ptr[wdx]);
+			free(ptr);
+			return (NULL);
+		}
+		for (ldx = 0; ldx < wl; ldx++, idx++)
+			ptr[wdx][ldx] = str[idx];
+		ptr[wdx][ldx] = '\0';
 	}
-	nstr[istr] = '\0';
-	return (nstr);
+	ptr[wdx] = NULL;
+
+	return (ptr);
 }
