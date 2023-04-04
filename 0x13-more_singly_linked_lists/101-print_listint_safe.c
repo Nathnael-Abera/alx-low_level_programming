@@ -1,34 +1,36 @@
 #include "lists.h"
+
 /**
- * print_listint_safe - thsi function print a list in safe mode
- * @head: the head of list
- * Description: this function print a string in a safe mode
- * section header: the header of this function is lists.h)*
- * Return: the size of the list
+ * print_listint_safe - print all the elements of listint_t
+ * @head: the head of the list
+ * Return: number of nodes
  */
 size_t print_listint_safe(const listint_t *head)
 {
-	int difference, i, number;
-	void *address;
+	size_t nodes = 0;
+	size_t dist;
+	const listint_t *ptr = head;
+	const listint_t *nxt;
 
-	i = 0;
-
-	while (head != NULL)
+	while (ptr)
 	{
-		difference = head - head->next;
-		i++;
-		number = head->n;
-		printf("[%p] %i\n", (void *)head, number);
-		if (difference > 0)
-			head = head->next;
-		else
-		{
-			address = head->next;
-			number = head->next->n;
-			printf("-> [%p] %i\n", address, number);
-			break;
-		}
+		printf("[%p] %d\n", (void *)ptr, ptr->n);
 
+		nodes++;
+		ptr = ptr->next;
+		nxt = head;
+
+		dist = 0;
+		while (dist < nodes)
+		{
+			if (ptr == nxt)
+			{
+				printf("-> [%p] %d\n", (void *)ptr, ptr->n);
+				return (nodes);
+			}
+			nxt = nxt->next;
+			dist++;
+		}
 	}
-	return (i);
+	return (nodes);
 }
