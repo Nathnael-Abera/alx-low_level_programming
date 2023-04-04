@@ -1,23 +1,20 @@
 #include "lists.h"
+
 /**
- * free_listint - free a list
-(* a blank line
-*@head: the head of list
-* Description: this function free a list.)?
-(* section header: the header of this function is lists.h)*
-* Return: void, no return
-*/
+ * free_listint - frees all nodes of a list
+ * @head: point the head of list
+ * Return: void
+ */
 void free_listint(listint_t *head)
 {
-	listint_t *position;
+	listint_t *next;
+	listint_t *ptr = head;
 
-	if (head == NULL)
-		return;
-	while (head != NULL)
+	while (ptr)
 	{
-		position = head;
-		head = head->next;
-		free(position);
+		next = ptr->next;
+		free(ptr);
+		ptr = next;
 	}
-	head = '\0';
+	head = NULL;
 }

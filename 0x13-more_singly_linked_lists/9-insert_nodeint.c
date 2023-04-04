@@ -1,46 +1,46 @@
 #include "lists.h"
+
 /**
- * insert_nodeint_at_index - thsi function create a new index
- * @head: the head of list
- * @idx: the index to put the new node
- * @n: the value to put in the nex node.
- * Description: this function create a new index
- * section header: the header of this function is lists.h)*
- * Return: return the final result of the sum
+ * insert_nodeint_at_index - inserts a new node at a given position
+ * @head: points to the head of the list
+ * @idx: the index of the node
+ * @n: the value of the new node
+ * Return: the address of the new node, or NULL if it failed
  */
 listint_t *insert_nodeint_at_index(listint_t **head, unsigned int idx, int n)
 {
-	listint_t *node, *actual;
-	unsigned int i;
+	unsigned int index;
+	listint_t *newNode, *ptr;
 
-	if (head == NULL)
+	if (!head)
 		return (NULL);
 
-	node = malloc(sizeof(listint_t));
+	ptr = *head;
 
-	if (node == NULL)
+	newNode = malloc(sizeof(listint_t));
+	if (!newNode)
 		return (NULL);
-	node->n = n;
 
-	if (idx == '\0')
+	newNode->n = n;
+	newNode->next = NULL;
+	if (!idx)
 	{
-		node->next = *head;
-		*head = node;
-		return (node);
+		newNode->next = *head;
+		*head = newNode;
+		return (newNode);
 	}
 
-	actual = *head;
-
-	for (i = 0; actual; i++)
+	for (index = 0; index < (idx - 1); index++)
 	{
-		if (i == idx - 1)
+		if (ptr)
+			ptr = ptr->next;
+		else
 		{
-			node->next = actual->next;
-			actual->next = node;
-			return (node);
+			free(newNode);
+			return (NULL);
 		}
-		actual = actual->next;
 	}
-	free(node);
-	return (NULL);
+	newNode->next = ptr->next;
+	ptr->next = newNode;
+	return (newNode);
 }
